@@ -47,8 +47,8 @@ class AddressBook {
     }
 
 
-    List<String> searchOnStreet(String street) {
-        List<String> listOfPersonOnStreet = new ArrayList<>();
+    List<String> searchOnStreet(String street) {                                    //метод поиска людей, живущих на
+        List<String> listOfPersonOnStreet = new ArrayList<>();                      //заданной улице
         for (Map.Entry<String, Address> addressBook : humanAddress.entrySet()) {
             if (Objects.equals(addressBook.getValue().getStreet(), street)) {
                 listOfPersonOnStreet.add(addressBook.getKey());
@@ -57,8 +57,8 @@ class AddressBook {
         return listOfPersonOnStreet;
     }
 
-    List<String> searchOnHouse(String street, int house) {
-        List<String> listOfPersonOnHouse = new ArrayList<>();
+    List<String> searchOnHouse(String street, int house) {                           //метод поиска людей, живущих в
+        List<String> listOfPersonOnHouse = new ArrayList<>();                        //заданном доме
         for (Map.Entry<String, Address> addressBook : humanAddress.entrySet()) {
             if (Objects.equals(addressBook.getValue().getStreet(), street) &&
                     addressBook.getValue().getHouse() == house) {
