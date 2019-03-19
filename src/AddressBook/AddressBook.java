@@ -1,38 +1,28 @@
 package AddressBook;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class AddressBook {
+class AddressBook {
 
-    Map<String, ArrayList<String>> humanAddress = new HashMap<>();
+    private Map<String, Address> humanAddress = new HashMap<>();
 
-    public Map<String, ArrayList<String>> get() {
+    Map<String, Address> get() {
         return humanAddress;
     }
 
-    public void addPersonAddress(String name, List<String> address) {           // метод добавления пары человек - адрес
+    void addPersonAddress(String name, Address address) {           // метод добавления пары человек - адрес
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Нельзя вводить человека без имени");
         } else {
             if (humanAddress.containsKey(name)) {
                 throw new IllegalArgumentException("Такой человек уже записан в адресную книгу.");
             } else {
-                if(Integer.parseInt(address.get(1)) > 0 && Integer.parseInt(address.get(2)) > 0 ) {
-                    humanAddress.put(name, (ArrayList<String>) address);
-                } else {
-                    throw new IllegalArgumentException("Неправильный формат ввода квартиры или дома.");
-                }
-
+                humanAddress.put(name, address);
             }
         }
-
-
     }
 
-    public void deleteName(String name) {                                                      //метод удаления человека
+    void deleteName(String name) {                                                      //метод удаления человека
         if (humanAddress.containsKey(name)) {
             humanAddress.remove(name);
         } else {
@@ -41,38 +31,40 @@ public class AddressBook {
 
     }
 
-    public void change(String name, List<String> address) {                           // метод изменения адреса человека
+    void change(String name, Address address) {                           // метод изменения адреса человека
         if (humanAddress.containsKey(name)) {
-            humanAddress.get(name).remove(address);
-            ArrayList<String> listAddress = new ArrayList<>();
-            listAddress.addAll(address);
-            humanAddress.put(name, listAddress);
+            humanAddress.replace(name, address);
         } else {
             throw new IllegalArgumentException("Такого человека нет в адресной книге. Изменить адрес невозможно");
         }
 
     }
 
-    public String searchAddress(String name) {                                        // метод получения адреса человека
+    String searchAddress(String name) {                                        // метод получения адреса человека
         if (humanAddress.containsKey(name))
             return humanAddress.get(name).toString();
         throw new IllegalArgumentException("Такого человека нет");
     }
 
-    public String search(String address) {
-        for (Map.Entry entry : humanAddress.entrySet()) {                       // метод получения списка людей, живущих
-            if (entry.getValue().toString().contains(address))                   //на заданной улице или в заданном доме
-                return entry.getKey().toString();
+
+    List<String> searchOnStreet(String street) {
+        List<String> listOfPersonOnStreet = new ArrayList<>();
+        for (Map.Entry<String, Address> addressBook : humanAddress.entrySet()) {
+            if (Objects.equals(addressBook.getValue().getStreet(), street)) {
+                listOfPersonOnStreet.add(addressBook.getKey());
+            }
         }
-        throw new IllegalArgumentException("Такого адреса нет");
+        return listOfPersonOnStreet;
     }
 
-
-
-
-
-
-
-
-
+    List<String> searchOnHouse(String street, int house) {
+        List<String> listOfPersonOnHouse = new ArrayList<>();
+        for (Map.Entry<String, Address> addressBook : humanAddress.entrySet()) {
+            if (Objects.equals(addressBook.getValue().getStreet(), street) &&
+                    addressBook.getValue().getHouse() == house) {
+                listOfPersonOnHouse.add(addressBook.getKey());
+            }
+        }
+        return listOfPersonOnHouse;
+    }
 }
